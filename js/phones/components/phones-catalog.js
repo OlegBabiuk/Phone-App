@@ -8,26 +8,7 @@ export default class PhonesCatalog extends Component {
     super({ element });
     this.element = element;
     this.allPhones = allPhones;
-    this.allPhonesHtml = this.allPhones.map(phone => {
-      return `
-        <li class="thumbnail">
-          <a href="#!/phones/${phone.id}" class="thumb" data-phone-id=${phone.id}>
-            <img alt="${phone.name}" src="${phone.imageUrl}">
-          </a>
-
-          <div class="phones__btn-buy-wrapper">
-            <a class="btn btn-success" data-phone-add=${phone.id} data-phone-id=${phone.id}>
-              Add
-            </a>
-          </div>
-
-          <a href="#!/phones/${phone.id}" data-phone-id=${phone.id}>
-            ${phone.name}
-          </a>
-          <p>${phone.snippet}</p>
-        </li>
-      `
-    }).join('');
+    
     this._render();
     this.phoneSelected = phoneSelected;
     
@@ -43,7 +24,37 @@ export default class PhonesCatalog extends Component {
       }
     })
   }
+
   _render() {
+    this.allPhonesHtml = this.allPhones.map(phone => {
+      return `
+        <li data-element="phone" class="thumbnail">
+          <a
+            data-phone-id=${phone.id}
+            href="#!/phones/${phone.id}" 
+            class="thumb"
+          >
+            <img alt="${phone.name}" src="${phone.imageUrl}">
+          </a>
+
+          <div class="phones__btn-buy-wrapper">
+            <a
+              data-phone-add=${phone.id} 
+              data-phone-id=${phone.id}
+              class="btn btn-success"
+            >
+              Add
+            </a>
+          </div>
+
+          <a href="#!/phones/${phone.id}" data-phone-id=${phone.id}>
+            ${phone.name}
+          </a>
+          <p>${phone.snippet}</p>
+        </li>
+      `
+    }).join('');
+
     this.element.innerHTML = `
     <ul class="phones">
       ${this.allPhonesHtml}
