@@ -1,15 +1,9 @@
 import Component from '../../components.js'
 export default class PhonesViewer extends Component {
-  constructor({
-    element,
-    onBtnBack: onBtnBack = () => {},
-    onBtnBasket: onBtnBasket = () => {}
-  }) {
+  constructor({ element }) {
     super({ element });
     this.element = element;
     this._functionRouter = this._functionRouter.bind(this);
-    this.onBtnBack = onBtnBack;
-    this.onBtnBasket = onBtnBasket;
   }
 
   showDetails(phone) {
@@ -25,11 +19,11 @@ export default class PhonesViewer extends Component {
       this._gallery(event);
     }
     if (event.target.closest('[data-btn="back"]')) {
-      this.onBtnBack();
+      this.emit('onBtnBack');
       this.element.removeEventListener('click', this._functionRouter);
     }
     if (event.target.closest('[data-phone-id]')) {
-      this.onBtnBasket({
+      this.emit('onBtnBasket', {
         currentPhone: this.phoneDetails,
         amount: 1
       });

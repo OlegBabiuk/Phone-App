@@ -134,3 +134,76 @@ h1 {
   font-size: 14px;
   cursor: pointer;
 }
+
+.preloader {
+  display: flex;
+  height: 50vh;
+  position: relative;
+}
+
+.preloader img {
+  max-width: 350px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-60%);
+}
+
+.sidebar {
+  height: 100vh;
+}
+
+.phone-basket {
+  position: sticky;
+  top: 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.pagination select {
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.pagination__btn {
+  padding: 5px 10px;
+  border: 1px solid black;
+  margin: 5px;
+  cursor: pointer;
+  background-color: #e1e1e1;
+}
+
+.pagination ul {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination li {
+  display: block;
+  padding: 5px 10px;
+  border: 1px solid black;
+  margin: 5px;
+  cursor: pointer;
+  background-color: #e1e1e1;
+}
+
+.pagination li.active {
+  background-color: #919191;
+}
+
+.pagination__part_left {
+  padding-left: 40px;
+  display: flex;
+  align-items: baseline;
+}
+
+.pagination__part_center {
+  display: flex;
+  align-items: baseline;
+}

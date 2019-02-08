@@ -2,27 +2,30 @@ import Component from '../../components.js'
 export default class PhonesCatalog extends Component {
   constructor({
     element,
-    allPhones = [],
-    phoneSelected = () => {}
   }) {
     super({ element });
     this.element = element;
-    this.allPhones = allPhones;
+    this.allPhones = [];
     
     this._render();
-    this.phoneSelected = phoneSelected;
     
     this.element.addEventListener('click', (event) => {
       event.preventDefault();
       let viewPhone = event.target.closest('[data-phone-id]');
       let addPhone = event.target.closest('[data-phone-add]');
-      
+     
       if (addPhone) {
-        this.phoneSelected(viewPhone.dataset.phoneAdd, 1);
-      } else if (viewPhone) {
-        this.phoneSelected(viewPhone.dataset.phoneId);
+        this.emit('onBtnAdd', { phoneId: addPhone.dataset.phoneAdd, amount: 1 })
+      }
+      if (viewPhone) {
+        this.emit('viewPhone', viewPhone.dataset.phoneId);
       }
     })
+  }
+
+  showCatalog(allPhones) {
+    this.allPhones = allPhones;
+    this._render();
   }
 
   _render() {
@@ -40,7 +43,6 @@ export default class PhonesCatalog extends Component {
           <div class="phones__btn-buy-wrapper">
             <a
               data-phone-add=${phone.id} 
-              data-phone-id=${phone.id}
               class="btn btn-success"
             >
               Add
