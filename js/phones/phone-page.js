@@ -129,7 +129,7 @@ export default class PhonesPage extends Component {
 
   _onSearchPanel(allPhones) {
     let currentPhones = allPhones;
-    
+
     if (this.filterSettings.input) {
       currentPhones = currentPhones.filter(phone => {
         return phone.name.toLowerCase().includes(this.filterSettings.input);

@@ -6,7 +6,9 @@ export default class Pagination extends Component {
     this.onPage = 5;
     this.currentPage = 1;
     this.startPosition = 0;
+    this.switcherStatus = this.onPage ;
     this._render();
+
     this.paginationSwitch = this.element
         .querySelector('[data-pagination="switch"]');
     this.pageList = this.element
@@ -15,8 +17,12 @@ export default class Pagination extends Component {
         .querySelector('[data-pagination="indicatePage"]');
     this.navigation = this.element
         .querySelector('[data-pagination="navigation"]');
-    this._addListeners();
+    this.previousBtn = this.navigation
+        .querySelector('[data-pagination="previous"]');
+    this.nextBtn = this.navigation
+        .querySelector('[data-pagination="next"]');
     
+      this._addListeners();
   }
 
   division(allPhones, filterUsed) {
@@ -25,7 +31,7 @@ export default class Pagination extends Component {
     }
     this.allPhones = allPhones || this.allPhones;
     this.numberOfItems = this.allPhones.length;
-  
+
     this._calculatePages();
     this._updataPagination();
 
@@ -36,11 +42,12 @@ export default class Pagination extends Component {
 
   _addListeners() {
     this.paginationSwitch.addEventListener('input', (event) => {
-      if (event.target.value === 'all') {
+      this.switcherStatus = event.target.value;
+      if (this.switcherStatus === 'all') {
         this.onPage = this.numberOfItems;
         this.startPosition = 0;
       } else {
-        this.onPage = (+event.target.value > this.numberOfItems)
+        this.onPage = (+this.switcherStatus > this.numberOfItems)
           ? this.numberOfItems
           : +event.target.value;
       }
@@ -72,11 +79,15 @@ export default class Pagination extends Component {
       this.startPosition = 0;
     }
     
-    this.numberOfPages = Math.ceil(this.numberOfItems  / this.onPage);
-    this.finishPosition = this.startPosition + this.onPage;
-    this.currentPage = this.finishPosition / this.onPage;
+    this.numberOfPages = Math.ceil(this.numberOfItems  / this.switcherStatus);
+    this.finishPosition = this.startPosition + (isNaN(+this.switcherStatus)
+      ? this.onPage
+      : +this.switcherStatus);
+    this.currentPage = Math.floor(this.finishPosition / this.onPage);
     this.phonesListPart = this.allPhones
       .slice(this.startPosition, this.finishPosition);
+    console.log('this.currentPage:', this.currentPage)
+    console.log('this.numberOfPages:', this.numberOfPages)
   }
 
   _updataPagination() {
@@ -94,6 +105,23 @@ export default class Pagination extends Component {
         ${this.startPosition + 1} - ${this.phonesListPart.length + this.startPosition} of
         ${this.numberOfItems}
       </p>`;
+    
+    this.previousBtn.hidden = false;
+    if (this.currentPage === 1) {
+      this.previousBtn.hidden = true;
+    }
+    
+    this.nextBtn.hidden = false;
+    if (this.currentPage === this.numberOfPages
+        || this.switcherStatus === 'all'
+    ) {
+      this.nextBtn.hidden = true;
+    }
+
+    // this.navigation.hidden = false;
+    if (this.numberOfPages === 1) {
+      this.navigation.hidden = true;
+    }
   }
 
   _render() {
