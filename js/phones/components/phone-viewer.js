@@ -1,4 +1,5 @@
-import Component from '../../components.js'
+import Component from '../../components.js';
+
 export default class PhonesViewer extends Component {
   constructor({ element }) {
     super({ element });
@@ -25,7 +26,7 @@ export default class PhonesViewer extends Component {
     if (event.target.closest('[data-phone-id]')) {
       this.emit('onBtnBasket', {
         currentPhone: this.phoneDetails,
-        amount: 1
+        amount: 1,
       });
     }
   }
@@ -33,7 +34,7 @@ export default class PhonesViewer extends Component {
   _gallery(event) {
     this.element.querySelector('[data-img="large"]').src = event.target.src;
   }
-  
+
   _render() {
     const phone = this.phoneDetails;
     this.element.innerHTML = `
@@ -55,10 +56,11 @@ export default class PhonesViewer extends Component {
         <ul class="phone-thumbs">
 
           ${phone.images
-            .map(imageSrc => {
-              return '<li><img data-img="medium" src=' + imageSrc + '></li>'
-            })
-            .join('')}
+    .map(imageSrc => `
+      <li>
+        <img data-img="medium" src="${ imageSrc}">
+      </li>`)
+    .join('')}
         
         </ul>
 
@@ -69,10 +71,8 @@ export default class PhonesViewer extends Component {
               <dt>Availability</dt>
 
               ${phone.availability
-                .map(item => {
-                  return '<dd>' + item + '</dd>'
-                })
-                .join('')}
+    .map(item => `<dd>${ item }</dd>`)
+    .join('')}
                 
             </dl>
           </li>
@@ -172,6 +172,6 @@ export default class PhonesViewer extends Component {
           </li>
         </ul>
       </div>
-    `
+    `;
   }
 }

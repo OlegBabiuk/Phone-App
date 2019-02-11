@@ -1,7 +1,8 @@
 import Component from '../../components.js';
+
 export default class ShoppingCart extends Component {
   constructor({ element }) {
-    super({ element })
+    super({ element });
     this.element = element;
     this.items = this._ordersInStorage() || {};
     this.deleteItem = this.deleteItem.bind(this);
@@ -17,12 +18,12 @@ export default class ShoppingCart extends Component {
       this._ordersInStorage('set');
       isNeedToAdd = false;
     }
-    
+
     if (isNeedToAdd) {
       this.items[currentPhone.id] = { currentPhone, amount };
       this._ordersInStorage('set');
     }
-    this._render();    
+    this._render();
   }
 
   deleteItem(event) {
@@ -32,7 +33,8 @@ export default class ShoppingCart extends Component {
       this._ordersInStorage('set');
     }
   }
-  
+
+  // eslint-disable-next-line consistent-return
   _ordersInStorage(set) {
     if (set) {
       localStorage.setItem('itemsInBasket', JSON.stringify(this.items));
@@ -43,8 +45,7 @@ export default class ShoppingCart extends Component {
 
   _render() {
     this.itemsHtml = Object.entries(this.items)
-                           .map((savedItem) => {
-      return `
+      .map(savedItem => `
         <li data-element="phone">
           <div class="shoppingCart__img">
             <img alt="${savedItem[0]}"
@@ -57,14 +58,13 @@ export default class ShoppingCart extends Component {
           <i class="fas fa-times-circle"
             data-phone-id=${savedItem[1].currentPhone.id}></i>
         </li>
-      `
-    }).join('');
+      `).join('');
 
     this.element.innerHTML = `
       <p>Shopping Cart</p>
       <ul class="shoppingCart__list">
         ${this.itemsHtml || '<h5>Your Shopping Cart is empty</h5>'}
       </ul>
-    `
+    `;
   }
 }

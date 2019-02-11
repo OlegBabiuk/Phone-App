@@ -1,4 +1,5 @@
-import Component from '../../components.js'
+import Component from '../../components.js';
+
 export default class PhonesCatalog extends Component {
   constructor({
     element,
@@ -6,21 +7,24 @@ export default class PhonesCatalog extends Component {
     super({ element });
     this.element = element;
     this.allPhones = [];
-    
+
     this._render();
-    
+
     this.element.addEventListener('click', (event) => {
       event.preventDefault();
-      let viewPhone = event.target.closest('[data-phone-id]');
-      let addPhone = event.target.closest('[data-phone-add]');
-     
+      const viewPhone = event.target.closest('[data-phone-id]');
+      const addPhone = event.target.closest('[data-phone-add]');
+
       if (addPhone) {
-        this.emit('onBtnAdd', { phoneId: addPhone.dataset.phoneAdd, amount: 1 })
+        this.emit('onBtnAdd', {
+          phoneId: addPhone.dataset.phoneAdd,
+          amount: 1,
+        });
       }
       if (viewPhone) {
         this.emit('viewPhone', viewPhone.dataset.phoneId);
       }
-    })
+    });
   }
 
   showCatalog(allPhones) {
@@ -29,8 +33,7 @@ export default class PhonesCatalog extends Component {
   }
 
   _render() {
-    this.allPhonesHtml = this.allPhones.map(phone => {
-      return `
+    this.allPhonesHtml = this.allPhones.map(phone => `
         <li data-element="phone" class="thumbnail">
           <a
             data-phone-id=${phone.id}
@@ -54,13 +57,12 @@ export default class PhonesCatalog extends Component {
           </a>
           <p>${phone.snippet}</p>
         </li>
-      `
-    }).join('');
+      `).join('');
 
     this.element.innerHTML = `
     <ul class="phones">
       ${this.allPhonesHtml}
     </ul>
-    `
+    `;
   }
 }

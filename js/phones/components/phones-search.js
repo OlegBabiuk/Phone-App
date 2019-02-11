@@ -1,4 +1,5 @@
-import Component from '../../components.js'
+import Component from '../../components.js';
+
 export default class PhonesSearch extends Component {
   constructor({ element }) {
     super({ element });
@@ -8,10 +9,10 @@ export default class PhonesSearch extends Component {
     this.sort = element.querySelector('[data-element="sort"]');
 
     this.filter = this.debounce(this.filter, 500);
-    
+
     this.element.addEventListener('input', (event) => {
       this.emit('search', event);
-    })
+    });
   }
 
   _render() {
@@ -28,6 +29,6 @@ export default class PhonesSearch extends Component {
           <option value="name">Alphabetical</option>
         </select>
       </p>
-    `
+    `;
   }
 }

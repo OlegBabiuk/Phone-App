@@ -11,6 +11,7 @@ export default class Component {
   show() {
     this.element.hidden = false;
   }
+
   subscribe(trigger, callback) {
     this.callbackMap[trigger] = callback;
   }
@@ -23,16 +24,17 @@ export default class Component {
     tempFunction(callbackaArg);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   debounce(func, delay) {
     let timerId = null;
-    return function () {
+    return function tepm(arg) {
       clearTimeout(timerId);
 
       timerId = setTimeout(() => {
-        func.call(this, ...arguments);
+        func.call(this, arg);
         timerId = null;
       }, delay);
-    }
+    };
   }
 
   showPreloader() {
@@ -41,6 +43,7 @@ export default class Component {
         <img 
           alt='preloader' src='./img/preloader-gif-transparent-background-14.gif'
         >
-      </div>`;
+      </div>
+    `;
   }
 }
