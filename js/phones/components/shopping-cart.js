@@ -1,65 +1,70 @@
 import Component from '../../components.js';
+
 export default class ShoppingCart extends Component {
   constructor({ element }) {
-    super({ element })
+    super({ element });
     this.element = element;
-    this.items = [];
-    this.deleteItem = this.deleteItem.bind(this)
-
+    this.items = this._ordersInStorage() || {};
+    this.deleteItem = this.deleteItem.bind(this);
+    this.element.addEventListener('click', this.deleteItem);
     this._render();
   }
-  addToCart({ currentPhone, amount }) {
-    let isNeededAdd = true;
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].currentPhone.id === currentPhone.id) {
-        this.items[i].amount += amount;
-        isNeededAdd = false;
-        break;
-      }
-    }
-    if (isNeededAdd) {
-      this.items.push({ currentPhone, amount });
-      isNeededAdd = true;
-    }
-    this.itemsHtml = this.items.map(item => {
-      return `
-      <li>
-        <div class="shoppingCart__img">
-          <img alt=${item.currentPhone.id} src="${item.currentPhone.images[0]}">
-        </div>
-        <span class="shoppingCart__name">${item.currentPhone.name}</span>
-        <span class="shoppingCart__amount" data-basket="amount">
-          Qty: ${item.amount}
-        </span>
-        <i class="fas fa-times-circle"
-          data-phone-id=${item.currentPhone.id}></i>
-      </li>
-      `
-    }).join('');
 
+  addToCart({ currentPhone, amount = 1 }) {
+    let isNeedToAdd = true;
+
+    if (this.items[currentPhone.id]) {
+      this.items[currentPhone.id].amount += amount;
+      this._ordersInStorage('set');
+      isNeedToAdd = false;
+    }
+
+    if (isNeedToAdd) {
+      this.items[currentPhone.id] = { currentPhone, amount };
+      this._ordersInStorage('set');
+    }
     this._render();
-    this.element.removeEventListener('click', this.deleteItem);
-    this.element.addEventListener('click', this.deleteItem)
   }
 
   deleteItem(event) {
-    if (event.target.nodeName === 'I') {
-      for (let i = 0; i < this.items.length; i++) {
-        if (this.items[i].currentPhone.id === event.target.dataset.phoneId) {
-          this.items.splice(i, 1);
-          break;
-        }
-      }
-      event.target.closest('li').remove();
+    if (event.target.hasAttribute('data-phone-id')) {
+      delete this.items[event.target.dataset.phoneId];
+      event.target.closest('[data-element]').remove();
+      this._ordersInStorage('set');
     }
   }
-  
+
+  // eslint-disable-next-line consistent-return
+  _ordersInStorage(set) {
+    if (set) {
+      localStorage.setItem('itemsInBasket', JSON.stringify(this.items));
+    } else {
+      return JSON.parse(localStorage.getItem('itemsInBasket'));
+    }
+  }
+
   _render() {
+    this.itemsHtml = Object.entries(this.items)
+      .map(savedItem => `
+        <li data-element="phone">
+          <div class="shoppingCart__img">
+            <img alt="${savedItem[0]}"
+            src="${savedItem[1].currentPhone.images[0]}">
+          </div>
+          <span class="shoppingCart__name">${savedItem[1].currentPhone.name}</span>
+          <span class="shoppingCart__amount" data-basket="amount">
+            Qty: ${savedItem[1].amount}
+          </span>
+          <i class="fas fa-times-circle"
+            data-phone-id=${savedItem[1].currentPhone.id}></i>
+        </li>
+      `).join('');
+
     this.element.innerHTML = `
       <p>Shopping Cart</p>
       <ul class="shoppingCart__list">
-        ${this.itemsHtml || ''}
+        ${this.itemsHtml || '<h5>Your Shopping Cart is empty</h5>'}
       </ul>
-    `
+    `;
   }
 }
