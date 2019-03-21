@@ -1,16 +1,16 @@
 
-const BASE_URL = 'https://mate-academy.github.io/phone-catalogue-static';
+const BASE_URL = 'https://olegbabiuk.github.io/Phone-App';
 
 const PhoneService = {
 
 
   getAll() {
-    return fetch(`${BASE_URL}/api/phones.json`)
+    return fetch(`${BASE_URL}/phones/phones.json`)
       .then(response => response.json());
   },
 
   getById(id) {
-    return fetch(`${BASE_URL}/api/${id}.json`)
+    return fetch(`${BASE_URL}/phones/${id}.json`)
       .then(response => response.json());
   },
 };
