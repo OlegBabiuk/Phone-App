@@ -1,5 +1,5 @@
 
-const BASE_URL = 'https://mate-academy.github.io/phone-catalogue-static';
+const BASE_URL = 'https://mate-academy.github.io/phone-catalogue-static/api';
 
 const PhoneService = {
 
